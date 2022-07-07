@@ -4,7 +4,7 @@ from json import *
 
 def start_seats():
     '''
-    Creating new file of avaliable seats, if such file doesn't exists.
+    Creating a new file of available seats, if such file doesn't exist.
     '''
     # Hashing every seat with code with number of row and column
     places = {}
@@ -19,12 +19,16 @@ def read_seats():
     with open("seats.json", "r") as file:
         return load(file)
 
+def write_seats(places):
+    with open('seats.json', 'w') as file:
+        dump(places, file)
+
 
 def bookseat(event):
     '''
     Making every free seat booked. Controls every button by means of event.
-    If current seat is free, make it red and booked.
-    Show label about current booked seat.
+    If current seat is free, makes it red and booked.
+    Shows label about current booked seat.
     :param event:
     :return:
     '''
@@ -43,11 +47,6 @@ def hasher(row, place):
     return 100 * row + place
 
 
-def freeseats():
-    seats[hasher(i, j)] = True
-    if not seats[i][j].free:
-        with open(freeseats.json, 'w') as file:
-            dump(seats, file)
 
 # Creating main window
 root = Tk()
@@ -63,7 +62,7 @@ for i in range(len(seats)):
         seats[i][j].place = j + 1
         seats[i][j].grid(row=i, column=j)
         seats[i][j].bind('<Button-1>', bookseat)
-# Printing prices fo all rows
+# Printing prices of all rows
 for i in range(len(seats)):
     Label(root, text=i + 1).grid(row=i, column=16)
     Label(root, text=3000 - 100 * i).grid(row=i, column=17)
@@ -72,6 +71,7 @@ try:
     places = read_seats()
 except FileNotFoundError:
     start_seats()
+    places=read_seats()
 except:
     print("Something is going wrong!")
 
